@@ -1,10 +1,14 @@
-import { Router } from "express";
+import { Request, Router } from "express";
 import { addUser, login } from "../services/user-service";
+import loginSchema from "../validation/login-schema";
+import validate from "../../validation/validation-service";
+import registerSchema from "../validation/register-schema";
 
 const authRouter = Router();
 
-authRouter.post('/login', async (req, res, next) => {
+authRouter.post('/login', ...loginSchema, async (req: Request, res, next) => {
     try {
+        validate(req)
         const { email, password } = req.body
         const response = await login(email, password)
         return res.status(200).json(response)
@@ -13,8 +17,9 @@ authRouter.post('/login', async (req, res, next) => {
     }
 })
 
-authRouter.post('/register', async (req, res, next) => {
+authRouter.post('/register', ...registerSchema, async (req: Request, res, next) => {
     try {
+        validate(req)
         const { name, email, password } = req.body
         const addedUser = await addUser({ name, email, password })
         return res.status(201).json(addedUser)
