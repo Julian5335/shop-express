@@ -15,7 +15,7 @@ export function getJwt(email: string, roles: Role[]) {
 }
 
 export async function validateJwt(token: string, role: Role) {
-    const secret: string = process.env.JWT_SECRET!
+    const secret = process.env.JWT_SECRET!
     const payload = jwt.verify(token, secret)
     const { email, iat, exp, roles } = payload as Payload
     const now = Date.now()
