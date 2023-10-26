@@ -9,7 +9,10 @@ import userRouter from './user/routers/user-router';
 import healthRouter from './health/health';
 
 // Configure dotenv
+// Use default env file
 dotenv.config()
+// Switch to correct env file
+dotenv.config({ path: `${process.env.NODE_ENV!}.env` })
 
 // Initialize the express app
 const app = express();
@@ -32,7 +35,8 @@ mongoose
     .connect(process.env.MONGO_URI!)
     .then(() => {
         console.log("1/2", "connected to mongodb ...");
-        app.listen(process.env.PORT!, () => {
-            console.log("2/2", "App started ...");
+        const port = process.env.PORT!
+        app.listen(port, () => {
+            console.log("2/2", `App started on port ${port} ...`);
         })
     })
