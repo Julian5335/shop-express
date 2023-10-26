@@ -6,6 +6,7 @@ import authMiddleware from './auth/middleware/auth-middleware';
 import authRouter from './auth/routers/auth';
 import errorHandler from './errors/error-handler';
 import userRouter from './user/routers/user-router';
+import healthRouter from './health/health';
 
 // Configure dotenv
 dotenv.config()
@@ -20,6 +21,7 @@ app.use(bodyParser.json())
 app.use('/api/user', authMiddleware)
 
 // Routers
+app.use('/api/health', healthRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 
