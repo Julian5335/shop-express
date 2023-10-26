@@ -29,10 +29,10 @@ app.use('/api/user', userRouter)
 app.use(errorHandler)
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/shop')
+    .connect(process.env.MONGO_URI!)
     .then(() => {
         console.log("1/2", "connected to mongodb ...");
-        app.listen(process.env.PORT, () => {
+        app.listen(process.env.PORT!, () => {
             console.log("2/2", "App started ...");
         })
     })
