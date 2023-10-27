@@ -1,42 +1,9 @@
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import express from 'express';
-import mongoose from 'mongoose';
-import authMiddleware from './core/auth/middleware/auth-middleware';
-import authRouter from './core/auth/routers/auth';
-import errorHandler from './core/errors/error-handler';
+import App from './core/app';
 import userRouter from './user/routers/user-router';
-import healthRouter from './core/health/health';
 
-// Configure dotenv
-// Use default env file
-dotenv.config()
-// Switch to correct env file
-dotenv.config({ path: `${process.env.NODE_ENV!}.env` })
+const routers = [
+    { url: '/api/user', router: userRouter }
+]
 
-// Initialize the express app
-const app = express();
-
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
-// Middleware
-app.use('/api/user', authMiddleware)
-
-// Routers
-app.use('/api/health', healthRouter)
-app.use('/api/auth', authRouter)
-app.use('/api/user', userRouter)
-
-// Error handling middleware
-app.use(errorHandler)
-
-mongoose
-    .connect(process.env.MONGO_URI!)
-    .then(() => {
-        console.log("1/2", "connected to mongodb ...");
-        const port = process.env.PORT!
-        app.listen(port, () => {
-            console.log("2/2", `App started on port ${port} ...`);
-        })
-    })
+new App(routers)
+    .run()
