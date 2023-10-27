@@ -1,4 +1,4 @@
-import Repository, { Entity, IRepository } from "../../repositories/repository"
+import Repository, { Entity, IRepository } from "../../repository/repository"
 import { IUser } from "../models/user";
 
 export interface IUserRepository<IUser> extends IRepository<IUser> {

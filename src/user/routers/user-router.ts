@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { getUserFrom } from "../../auth/services/user-service";
+import { getUserFrom } from "../../core/auth/services/user-service";
 
 const userRouter = Router()
 

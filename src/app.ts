@@ -2,11 +2,11 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
-import authMiddleware from './auth/middleware/auth-middleware';
-import authRouter from './auth/routers/auth';
-import errorHandler from './errors/error-handler';
+import authMiddleware from './core/auth/middleware/auth-middleware';
+import authRouter from './core/auth/routers/auth';
+import errorHandler from './core/errors/error-handler';
 import userRouter from './user/routers/user-router';
-import healthRouter from './health/health';
+import healthRouter from './core/health/health';
 
 // Configure dotenv
 // Use default env file

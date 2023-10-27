@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { Entity } from "../../repositories/repository";
+import { Entity } from "../../repository/repository";
 import UserExistsByEmailError from "../errors/user-exists-by-email";
 import User, { IUser } from "../models/user";
 import UserRepository, { IUserRepository } from "../repositories/user-repository";
