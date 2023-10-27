@@ -4,7 +4,11 @@ import CannotFindByIdError from "./errors/cannot-find-by-id";
 export type Entity<T> = IfAny<T, any, Document<unknown, {}, T> & Omit<Require_id<T>, never>>
 
 export interface IRepository<T> {
+    findAll(): Promise<Entity<T>[]>
+    findById(_id: Types.ObjectId): Promise<Entity<T>>
     save(t: T): Promise<Entity<T>>
+    update(_id: Types.ObjectId, params: any): Promise<Entity<T>>
+    deleteById(_id: Types.ObjectId): Promise<void>
 }
 
 export default class Repository<T> implements IRepository<T> {
@@ -21,11 +25,10 @@ export default class Repository<T> implements IRepository<T> {
         return m
     }
 
-    async findById(_id: Types.ObjectId) {
+    async findById(_id: Types.ObjectId): Promise<Entity<T>> {
         const entity: Entity<T> | null = await this.M.findById(_id)
         if (!entity) {
-            const entityName: string = this.M.name
-            throw new CannotFindByIdError(entityName)
+            throw new CannotFindByIdError(this.M.name)
         }
         return entity
     }

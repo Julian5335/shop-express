@@ -2,14 +2,15 @@ import { Types } from "mongoose";
 import { Entity } from "../../repositories/repository";
 import UserExistsByEmailError from "../errors/user-exists-by-email";
 import User, { IUser } from "../models/user";
-import UserRepository from "../repositories/user-repository";
+import UserRepository, { IUserRepository } from "../repositories/user-repository";
 import bcrypt from 'bcrypt'
 import LoginError from "../errors/login-error";
 import { getJwt } from "./token-service";
+import { Response } from "express";
 
 type Token = { token: string }
 
-const repository = new UserRepository(User)
+const repository: IUserRepository<IUser> = new UserRepository(User)
 
 export async function login(email: string, password: string): Promise<Token> {
     const user = await repository.findByEmail(email)
@@ -30,6 +31,7 @@ export async function addUser(user: IUser): Promise<Token> {
     return { token }
 }
 
-export function findUserById(_id: Types.ObjectId): Promise<Entity<IUser>> {
-    return repository.findById(_id)
+export function getUserFrom(res: Response): Promise<Entity<IUser>> {
+    const userId = res.locals.principle._id
+    return repository.findById(userId)
 }
