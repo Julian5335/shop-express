@@ -6,4 +6,5 @@ const routers = [
 ]
 
 new App(routers)
+    .connectToDb()
     .run()

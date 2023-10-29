@@ -11,7 +11,7 @@ import healthRouter from './health/health';
 // Use default env file
 dotenv.config()
 // Switch to correct env file
-dotenv.config({ path: `${process.env.NODE_ENV!}.env` })
+dotenv.config({ path: `${process.env.PROFILE!}.env` })
 
 export default class App {
 
@@ -19,21 +19,20 @@ export default class App {
     app = express();
 
     constructor(routers: { url: string, router: Router }[]) {
-        this.useBodyParser()
-        this.useAuthMiddlewaree()
-        this.useRouters(routers)
-        this.useErrorHandler()
-    }
-
-    private useBodyParser() {
+        // Body Parser
         this.app.use(bodyParser.urlencoded({ extended: false }))
         this.app.use(bodyParser.json())
-    }
-
-    private useAuthMiddlewaree() {
+        
+        // Authentication
         this.app.use('/api/user', authMiddleware)
+        
+        // Routers
+        this.useRouters(routers)
+        
+        // Error handler
+        this.app.use(errorHandler)
     }
-
+    
     private useRouters(routers: { url: string, router: Router }[]) {
         this.app.use('/api/health', healthRouter)
         this.app.use('/api/auth', authRouter)
@@ -42,23 +41,21 @@ export default class App {
         })
     }
 
-    private useErrorHandler() {
-        this.app.use(errorHandler)
-    }
-
-    private connectToMongodb() {
-        mongoose
-            .connect(process.env.MONGO_URI!)
+    connectToDb() {
+        mongoose.connect(process.env.MONGO_URI!)
             .then(() => {
-                console.log("connected to mongodb ...");
+                console.log("MongoDB", "Connected");
             })
+            .catch((e) => {
+                console.log("MongoDB", e.message);
+            })
+        return this
     }
-
+    
     run() {
         const port = process.env.PORT!
         this.app.listen(port, () => {
             console.log(`App started on port ${port} ...`);
-            this.connectToMongodb()
         })
     }
 
