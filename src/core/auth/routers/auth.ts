@@ -20,8 +20,8 @@ authRouter.post('/login', ...loginSchema, async (req: Request, res, next) => {
 authRouter.post('/register', ...registerSchema, async (req: Request, res, next) => {
     try {
         validate(req)
-        const { name, email, password } = req.body
-        const addedUser = await addUser({ name, email, password })
+        const { _id, name, email, password } = req.body
+        const addedUser = await addUser({ _id, name, email, password })
         return res.status(201).json(addedUser)
     } catch (e) {
         next(e)

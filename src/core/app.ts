@@ -17,42 +17,46 @@ export default class App {
 
     // Initialize the express app
     app = express();
-
-    constructor(routers: { url: string, router: Router }[]) {
-        // Body Parser
-        this.app.use(bodyParser.urlencoded({ extended: false }))
-        this.app.use(bodyParser.json())
-        
-        // Authentication
-        this.app.use('/api/user', authMiddleware)
-        
-        // Routers
-        this.useRouters(routers)
-        
-        // Error handler
-        this.app.use(errorHandler)
-    }
+    routers: { url: string, router: Router }[] = []
     
-    private useRouters(routers: { url: string, router: Router }[]) {
+    private useRouters() {
         this.app.use('/api/health', healthRouter)
         this.app.use('/api/auth', authRouter)
-        routers.forEach(x => {
+        this.routers.forEach(x => {
             this.app.use(x.url, x.router)
         })
+    }
+
+    addRouters(routers: { url: string, router: Router }[]) {
+        this.routers = routers
+        return this
     }
 
     connectToDb() {
         mongoose.connect(process.env.MONGO_URI!)
             .then(() => {
-                console.log("MongoDB", "Connected");
+                console.log("MongoDB:", "Connected");
             })
             .catch((e) => {
-                console.log("MongoDB", e.message);
+                console.log("MongoDB:", e.message);
             })
         return this
     }
     
     run() {
+         // Body Parser
+         this.app.use(bodyParser.urlencoded({ extended: false }))
+         this.app.use(bodyParser.json())
+         
+         // Authentication
+         this.app.use('/api/user', authMiddleware)
+         
+         // Routers
+         this.useRouters()
+         
+         // Error handler
+         this.app.use(errorHandler)
+
         const port = process.env.PORT!
         this.app.listen(port, () => {
             console.log(`App started on port ${port} ...`);

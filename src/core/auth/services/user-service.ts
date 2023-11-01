@@ -1,12 +1,10 @@
-import { Types } from "mongoose";
-import { Entity } from "../../repository/repository";
+import bcrypt from 'bcrypt';
+import { Response } from "express";
+import LoginError from "../errors/login-error";
 import UserExistsByEmailError from "../errors/user-exists-by-email";
 import User, { IUser } from "../models/user";
 import UserRepository, { IUserRepository } from "../repositories/user-repository";
-import bcrypt from 'bcrypt'
-import LoginError from "../errors/login-error";
 import { getJwt } from "./token-service";
-import { Response } from "express";
 
 type Token = { token: string }
 
@@ -31,7 +29,7 @@ export async function addUser(user: IUser): Promise<Token> {
     return { token }
 }
 
-export function getUserFrom(res: Response): Promise<Entity<IUser>> {
+export function getUserFrom(res: Response): Promise<IUser> {
     const userId = res.locals.principle._id
     return repository.findById(userId)
 }

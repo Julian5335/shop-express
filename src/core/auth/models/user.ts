@@ -1,7 +1,8 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 import { Role } from "../enums/role";
 
 export interface IUser {
+    _id: Types.ObjectId
     email: string
     name: string
     password?: string

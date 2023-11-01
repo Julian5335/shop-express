@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { getUserFrom } from "../../core/auth/services/user-service";
+import { getUserFrom } from "../core/auth/services/user-service";
 
-const userRouter = Router()
+const userProfileRouter = Router()
 
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+userProfileRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await getUserFrom(res)
         
@@ -16,4 +16,4 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 })
 
-export default userRouter
+export default userProfileRouter

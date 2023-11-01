@@ -1,10 +1,7 @@
 import App from './core/app';
-import userRouter from './user/routers/user-router';
+import routers from './routers';
 
-const routers = [
-    { url: '/api/user', router: userRouter }
-]
-
-new App(routers)
+new App()
     .connectToDb()
+    .addRouters(routers)
     .run()
