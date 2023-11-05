@@ -1,9 +1,10 @@
 import { Schema, Types, model } from "mongoose"
-import { CountryCode } from "./countries"
+import { CountryCode, allCountryCodes } from "./countries"
 
 export interface IAddress {
     _id?: Types.ObjectId
     user_id?: Types.ObjectId
+    default: boolean,
     premise: string             // Apartment, Suite, Box number, etc.
     thoroughfare: string        // Street address
     locality: string            // City / Town
@@ -17,6 +18,10 @@ const schema = new Schema<IAddress>({
         type: Schema.Types.ObjectId, 
         ref: 'User',
         required: true
+    },
+    default: {
+        type: Boolean, 
+        default: false
     },
     premise: {
         type: String,
@@ -40,7 +45,8 @@ const schema = new Schema<IAddress>({
     },
     country: {
         type: String,
-        required: true
+        enum: allCountryCodes(),
+        default: CountryCode.india
     },
 })
 

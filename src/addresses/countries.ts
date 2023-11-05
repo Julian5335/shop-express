@@ -10,4 +10,21 @@ export enum CountryCode {
     japan = "JPN",
     china = "CHN",
     south_korea = "KOR",
+
+}
+
+export function allCountryCodes() {
+    return [
+        CountryCode.usa,
+        CountryCode.canada,
+        CountryCode.uk,
+        CountryCode.france,
+        CountryCode.germany,
+        CountryCode.ireland,
+        CountryCode.denmark,
+        CountryCode.india,
+        CountryCode.japan,
+        CountryCode.china,
+        CountryCode.south_korea
+    ]
 }

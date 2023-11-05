@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 import Address, { IAddress } from "./address";
-import { AddressRepository } from "./address.repository";
+import { AddressRepository, IAddressRepository } from "./address.repository";
 
-const repository = new AddressRepository(Address)
+const repository: IAddressRepository = new AddressRepository(Address)
 
 export async function get(user_id: Types.ObjectId) {
     return await repository.findByUserId(user_id)
