@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/user'
 import UserRepository from '../repositories/user-repository'
-import ForbiddenError from '../../errors/forbidden-error'
+import ForbiddenError from '../../core/errors/forbidden-error'
 import { Role } from '../enums/role'
 
 type Payload = { email: string, iat: number, exp: number, roles: Role[] }

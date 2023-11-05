@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { getUserFrom } from "../core/auth/services/user-service";
+import { getUserFrom } from "../auth/services/user-service";
 
 const userProfileRouter = Router()
 
@@ -11,6 +11,14 @@ userProfileRouter.get('/', async (req: Request, res: Response, next: NextFunctio
         user.password = undefined
 
         return res.status(200).json(user)
+    } catch (e) {
+        next(e)
+    }
+})
+
+userProfileRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        
     } catch (e) {
         next(e)
     }

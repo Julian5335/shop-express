@@ -8,7 +8,7 @@ import { getJwt } from "./token-service";
 
 type Token = { token: string }
 
-const repository: IUserRepository<IUser> = new UserRepository(User)
+const repository: IUserRepository = new UserRepository(User)
 
 export async function login(email: string, password: string): Promise<Token> {
     const user = await repository.findByEmail(email)

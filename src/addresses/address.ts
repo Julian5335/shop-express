@@ -1,26 +1,23 @@
-import { Schema, model } from "mongoose"
+import { Schema, Types, model } from "mongoose"
 import { CountryCode } from "./countries"
 
 export interface IAddress {
-    // Apartment, Suite, Box number, etc.
-    premise: string
-
-    // Street address
-    thoroughfare: string
-
-    // City / Town
-    locality: string
-
-    // State / Province / Region (ISO code when available)
-    administrativeArea: string
-
+    _id?: Types.ObjectId
+    user_id?: Types.ObjectId
+    premise: string             // Apartment, Suite, Box number, etc.
+    thoroughfare: string        // Street address
+    locality: string            // City / Town
+    administrativeArea: string  // State / Province / Region (ISO code when available)
     postalCode: string
-
-    // Country (always required, 2 character ISO code)
-    country: CountryCode
+    country: CountryCode        // Country (always required, 2 character ISO code)
 }
 
 const schema = new Schema<IAddress>({
+    user_id: {
+        type: Schema.Types.ObjectId, 
+        ref: 'User',
+        required: true
+    },
     premise: {
         type: String,
         required: true,
@@ -47,5 +44,5 @@ const schema = new Schema<IAddress>({
     },
 })
 
-const Address = model<IAddress>("User", schema)
+const Address = model<IAddress>("Address", schema)
 export default Address

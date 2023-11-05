@@ -7,8 +7,8 @@ const loginSchema = checkSchema({
     },
     password: {
         isLength: {
-            options: { min: 8 },
-            errorMessage: 'Password should be at least 8 chars',
+            options: { min: 5 },
+            errorMessage: 'Password should be at least 5 chars',
         },
     }
 })

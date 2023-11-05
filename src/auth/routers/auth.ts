@@ -1,7 +1,7 @@
 import { Request, Router } from "express";
 import { addUser, login } from "../services/user-service";
 import loginSchema from "../validation/login-schema";
-import validate from "../../validation/validation-service";
+import validate from "../../core/validation/validation-service";
 import registerSchema from "../validation/register-schema";
 
 const authRouter = Router();
