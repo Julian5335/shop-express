@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import { Response } from "express";
 import LoginError from "../errors/login-error";
 import UserExistsByEmailError from "../errors/user-exists-by-email";
 import User, { IUser } from "../models/user";
@@ -27,9 +26,4 @@ export async function addUser(user: IUser): Promise<Token> {
     repository.save(user)
     const token = getJwt(user.email, user.roles!)
     return { token }
-}
-
-export function getUserFrom(res: Response): Promise<IUser> {
-    const userId = res.locals.principle._id
-    return repository.findById(userId)
 }

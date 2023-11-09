@@ -1,4 +1,4 @@
-import { Model, Types } from "mongoose";
+import { Model, SaveOptions, Types } from "mongoose";
 import CannotFindByIdError from "./errors/cannot-find-by-id";
 
 export interface IRepository<T> {
@@ -29,14 +29,14 @@ export default class Repository<T> implements IRepository<T> {
         return entity
     }
 
-    async save(t: T): Promise<T> {
+    async save(t: T, options?: SaveOptions): Promise<T> {
         const m = new this.M(t)
-        await m.save()
+        await m.save(options)
         return m
     }
 
-    async update(_id: Types.ObjectId, params: any): Promise<T> {
-        const updatedEntity = await this.M.findOneAndUpdate({ _id }, { $set: params })
+    async update(_id: Types.ObjectId, params: { [key: string]: any }): Promise<T> {
+        const updatedEntity = await this.M.findOneAndUpdate({ _id }, params, { new: true })
         if (!updatedEntity) {
             const entityName: string = this.M.name
             throw new CannotFindByIdError(entityName)

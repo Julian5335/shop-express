@@ -1,5 +1,5 @@
 import { Request, Router } from "express";
-import { addUser, login } from "../services/user-service";
+import { addUser, login } from "../services/auth.service";
 import loginSchema from "../validation/login-schema";
 import validate from "../../core/validation/validation-service";
 import registerSchema from "../validation/register-schema";
