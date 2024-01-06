@@ -3,8 +3,8 @@ import { CountryCode, allCountryCodes } from "./countries"
 
 export interface IAddress {
     _id?: Types.ObjectId
-    user_id?: Types.ObjectId
-    default: boolean,
+    userId: Types.ObjectId
+    default: boolean
     premise: string             // Apartment, Suite, Box number, etc.
     thoroughfare: string        // Street address
     locality: string            // City / Town
@@ -14,7 +14,7 @@ export interface IAddress {
 }
 
 const schema = new Schema<IAddress>({
-    user_id: {
+    userId: {
         type: Schema.Types.ObjectId, 
         ref: 'User',
         required: true

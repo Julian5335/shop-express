@@ -5,3 +5,9 @@ export class DefaultAddressNotSetError extends BadRequestError {
         super("Default address is not set")
     }
 }
+
+export class UserAddressNotFoundByIdError extends BadRequestError {
+    constructor() {
+        super("Address does not exist", "_id")
+    }
+}

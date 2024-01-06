@@ -1,13 +1,10 @@
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import authMiddleware from './auth/middleware/auth-middleware';
-import authRouter from './auth/routers/auth';
 import errorHandler from './core/errors/error-handler';
-import healthRouter from './core/health/health';
-import userProfileRouter from './user.profile/user.profile.router';
-import dotenv from 'dotenv'
-import addressRouter from './addresses/address.router';
+import routers from './app.routers';
 
 // Configure dotenv
 // Use default env file
@@ -26,10 +23,7 @@ app.use(bodyParser.json())
 app.use('/api/users', authMiddleware)
 
 // Routers
-app.use('/api/health', healthRouter)
-app.use('/api/auth', authRouter)
-app.use('/api/users/profile', userProfileRouter)
-app.use('/api/users/addresses', addressRouter)
+routers.forEach(x => app.use(x.path, x.router))
 
 // Error handler
 app.use(errorHandler)

@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { Types } from "mongoose";
 import { getUserFrom } from "../user.profile/user.profile.service";
-import { IAddress } from "./address";
+import { AddressRequest, addressSchema } from "./address.requests";
 import { addAddress, deleteAddressByUserIdAndId, getAddresses, getDefaultAddress, updateAddress } from "./address.service";
-import { UpdateAddressRequest } from "./address.requests";
 
 const addressRouter = Router()
 
@@ -27,22 +26,22 @@ addressRouter.get('/default', async (req: Request, res: Response, next: NextFunc
     }
 })
 
-addressRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+addressRouter.post('/', ...addressSchema, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await getUserFrom(res)
-        const address: IAddress = req.body
-        const addedAddress = await addAddress(user._id, address)
+        const addressRequest: AddressRequest = req.body
+        const addedAddress = await addAddress(user._id, addressRequest)
         return res.status(201).json(addedAddress)
     } catch (e) {
         next(e)
     }
 })
 
-addressRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+addressRouter.put('/:id', ...addressSchema , async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = new Types.ObjectId(req.params.id)
         const user = await getUserFrom(res)
-        const addressRequest: UpdateAddressRequest = req.body
+        const addressRequest: AddressRequest = req.body
         const addedAddress = await updateAddress(user._id, id, addressRequest)
         return res.status(200).json(addedAddress)
     } catch (e) {

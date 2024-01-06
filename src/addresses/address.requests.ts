@@ -1,7 +1,7 @@
-import { IAddress } from "./address"
-import { CountryCode } from "./countries"
+import { checkSchema } from "express-validator"
+import { CountryCode, allCountryCodes } from "./countries"
 
-export interface UpdateAddressRequest {
+export interface AddressRequest {
     default: boolean
     premise: string
     thoroughfare: string
@@ -11,12 +11,49 @@ export interface UpdateAddressRequest {
     country: CountryCode     
 }
 
-export function updateAddressFromRequest(address: IAddress, req: UpdateAddressRequest) {
-    address.default = req.default
-    address.premise = req.premise
-    address.thoroughfare = req.thoroughfare
-    address.locality = req.locality
-    address.administrativeArea = req.administrativeArea
-    address.postalCode = req.postalCode
-    address.country = req.country
+const isLength = (max: number) => {
+    return {
+        options: { max },
+        errorMessage: 'Cannot exceed 20 characters'
+    }
 }
+
+export const addressSchema = checkSchema({
+    default: {
+        isBoolean: true,
+        errorMessage: 'Should be true or false',
+    },
+    premise: {
+        notEmpty: true,
+        isLength: isLength(20),
+        errorMessage: 'Please enter a value'
+    },
+    thoroughfare: {
+        notEmpty: true,
+        isLength: isLength(20),
+        errorMessage: 'Please enter a value'
+    },
+    locality: {
+        notEmpty: true,
+        isLength: isLength(20),
+        errorMessage: 'Please enter a value'
+    },
+    administrativeArea: {
+        notEmpty: true,
+        isLength: isLength(20),
+        errorMessage: 'Please enter a value'
+    },
+    postalCode: {
+        notEmpty: true,
+        isLength: isLength(20),
+        errorMessage: 'Please enter a value'
+    },
+    country: {
+        notEmpty: true,
+        isIn: {
+            options: [allCountryCodes()],
+            errorMessage: 'Please enter a valid country'
+        },
+        errorMessage: 'Please enter a value.'
+    }
+})

@@ -1,47 +1,61 @@
 import { Types } from "mongoose";
 import Address, { IAddress } from "./address";
-import { DefaultAddressNotSetError } from "./address.errors";
+import { DefaultAddressNotSetError, UserAddressNotFoundByIdError } from "./address.errors";
 import { AddressRepository, IAddressRepository } from "./address.repository";
-import { AddressNotFoundError } from "./address.exceptions";
-import { updateAddressFromRequest } from "./address.requests";
+import { AddressRequest } from "./address.requests";
 
 const repository: IAddressRepository = new AddressRepository(Address)
 
-export async function getAddresses(user_id: Types.ObjectId) {
-    return await repository.findByUserId(user_id)
+export async function getAddresses(userId: Types.ObjectId) {
+    return await repository.findByUserId(userId)
 }
 
-export async function getDefaultAddress(user_id: Types.ObjectId) {
-    const address = await repository.findByUserIdAndIsDefaultTrue(user_id)
+export async function getDefaultAddress(userId: Types.ObjectId) {
+    const address = await repository.findByUserIdAndIsDefaultTrue(userId)
     if (!address) throw new DefaultAddressNotSetError()
     return address
 }
 
-export async function addAddress(user_id: Types.ObjectId, req: IAddress) {
-    req.user_id = user_id
-    return await repository.save(req)
-}
-
-export async function updateAddress(user_id: Types.ObjectId, id: Types.ObjectId, req: IAddress) {
-    const address = await findByIdAndUserId(id, user_id)
+export async function addAddress(userId: Types.ObjectId, req: AddressRequest) {
     if (req.default) {
-        const currentDefaultAddress = await getDefaultAddress(user_id).catch((e: DefaultAddressNotSetError) => undefined)
-        if (currentDefaultAddress) {
-            currentDefaultAddress.default = false
-            await repository.save(currentDefaultAddress)
-        }
+        await updateCurrentDefaultAddress(userId)
     }
-    updateAddressFromRequest(address, req)
+    const address = { userId, ...req }
     return await repository.save(address)
 }
 
-export async function deleteAddressByUserIdAndId(user_id: Types.ObjectId, id: Types.ObjectId) {
-    const address = await findByIdAndUserId(id, user_id)
+export async function updateAddress(userId: Types.ObjectId, id: Types.ObjectId, req: AddressRequest) {
+    const address = await findByIdAndUserId(id, userId)
+    address.default = req.default
+    address.premise = req.premise
+    address.thoroughfare = req.thoroughfare
+    address.locality = req.locality
+    address.administrativeArea = req.administrativeArea
+    address.postalCode = req.postalCode
+    address.country = req.country
+    
+    if (req.default) {
+        await updateCurrentDefaultAddress(userId)
+    }
+
+    return await repository.save(address)
+}
+
+export async function deleteAddressByUserIdAndId(userId: Types.ObjectId, id: Types.ObjectId) {
+    const address = await findByIdAndUserId(id, userId)
     await repository.deleteById(address._id!)
 }
 
-async function findByIdAndUserId(id: Types.ObjectId, user_id: Types.ObjectId): Promise<IAddress> {
-    const address = await repository.findByIdAndUserId(id, user_id)
-    if (!address) throw new AddressNotFoundError()
+async function findByIdAndUserId(id: Types.ObjectId, userId: Types.ObjectId): Promise<IAddress> {
+    const address = await repository.findByIdAndUserId(id, userId)
+    if (!address) throw new UserAddressNotFoundByIdError()
     return address
+}
+
+async function updateCurrentDefaultAddress(userId: Types.ObjectId) {
+    const currentDefaultAddress = await getDefaultAddress(userId).catch((e: DefaultAddressNotSetError) => undefined)
+    if (currentDefaultAddress) {
+        currentDefaultAddress.default = false
+        await repository.save(currentDefaultAddress)
+    }
 }
