@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import ForbiddenError from "../../core/errors/forbidden-error";
-import { Role } from "../enums/role";
-import { validateJwt } from "../services/token-service";
+import { ForbiddenError } from "../app.errors";
+import { Role } from "./auth.models";
+import TokenService, { ITokenService } from "./token.service";
+
+const tokenService: ITokenService = new TokenService()
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.headers.authorization?.substring(7)!
         if (!token) throw new ForbiddenError('Not logged in', 'token')
-        const user = await validateJwt(token, Role.USER)!
+        const user = await tokenService.validateJwt(token, Role.USER)!
         res.locals.principle = user
         next()
     } catch (e) {

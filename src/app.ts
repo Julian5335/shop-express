@@ -1,16 +1,17 @@
-import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import express from 'express';
-import mongoose from 'mongoose';
-import authMiddleware from './auth/middleware/auth-middleware';
-import errorHandler from './core/errors/error-handler';
-import routers from './app.routers';
-
 // Configure dotenv
 // Use default env file
 dotenv.config()
 // Switch to correct env file
 dotenv.config({ path: `${process.env.PROFILE!}.env` })
+
+import bodyParser from 'body-parser';
+import express from 'express';
+import mongoose from 'mongoose';
+import routers from './app.routers';
+import authMiddleware from './authentication/auth.middleware';
+import errorHandler from './app.errors';
+
 
 // Initialize the express app
 const app = express();

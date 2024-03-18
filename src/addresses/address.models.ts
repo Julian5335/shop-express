@@ -1,9 +1,39 @@
 import { Schema, Types, model } from "mongoose"
-import { CountryCode, allCountryCodes } from "./countries"
+
+export enum CountryCode {
+    usa = "USA",
+    canada = "CAN",
+    uk = "GBR",
+    france = "FRA",
+    germany = "DEU",
+    ireland = "IRL",
+    denmark = "DNK",
+    india = "IND",
+    japan = "JPN",
+    china = "CHN",
+    south_korea = "KOR",
+
+}
+
+export function allCountryCodes() {
+    return [
+        CountryCode.usa,
+        CountryCode.canada,
+        CountryCode.uk,
+        CountryCode.france,
+        CountryCode.germany,
+        CountryCode.ireland,
+        CountryCode.denmark,
+        CountryCode.india,
+        CountryCode.japan,
+        CountryCode.china,
+        CountryCode.south_korea
+    ]
+}
 
 export interface IAddress {
-    _id?: Types.ObjectId
-    userId: Types.ObjectId
+    // _id?: Types.ObjectId
+    // userId: Types.ObjectId
     default: boolean
     premise: string             // Apartment, Suite, Box number, etc.
     thoroughfare: string        // Street address
@@ -13,12 +43,12 @@ export interface IAddress {
     country: CountryCode        // Country (always required, 2 character ISO code)
 }
 
-const schema = new Schema<IAddress>({
-    userId: {
-        type: Schema.Types.ObjectId, 
-        ref: 'User',
-        required: true
-    },
+const addressSchema = new Schema<IAddress>({
+    // userId: {
+    //     type: Schema.Types.ObjectId, 
+    //     ref: 'User',
+    //     required: true
+    // },
     default: {
         type: Boolean, 
         default: false
@@ -50,5 +80,7 @@ const schema = new Schema<IAddress>({
     },
 })
 
-const Address = model<IAddress>("Address", schema)
-export default Address
+// const Address = model<IAddress>("Address", schema)
+// export default Address
+
+export default addressSchema

@@ -1,7 +1,12 @@
-import addressRouter from "./addresses/address.router"
-import authRouter from "./auth/routers/auth"
-import healthRouter from "./core/health/health"
-import userProfileRouter from "./user.profile/user.profile.router"
+import { Request, Response, Router } from "express"
+import authRouter from "./authentication/auth.routers"
+
+const healthRouter = Router()
+healthRouter.get('/', async (req: Request, res: Response) => {
+    return res.status(200).json({
+        status: 'OK'
+    })
+})
 
 const routers = [
     {
@@ -11,14 +16,6 @@ const routers = [
     {
         path: '/api/auth', 
         router: authRouter
-    },
-    {
-        path: '/api/users/profile', 
-        router: userProfileRouter
-    },
-    {
-        path: '/api/users/addresses', 
-        router: addressRouter
     }
 ]
 
