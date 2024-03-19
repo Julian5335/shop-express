@@ -11,3 +11,9 @@ export class UserExistsByEmailError extends BadRequestError {
         super('Email is not available', 'email')
     }
 }
+
+export class UserDoesntExistError extends BadRequestError {
+    constructor() {
+        super('Unable to find user by id', 'token')
+    }
+}

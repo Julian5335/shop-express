@@ -8,10 +8,9 @@ dotenv.config({ path: `${process.env.PROFILE!}.env` })
 import bodyParser from 'body-parser';
 import express from 'express';
 import mongoose from 'mongoose';
+import errorHandler, { NotFoundError } from './app.errors';
 import routers from './app.routers';
 import authMiddleware from './authentication/auth.middleware';
-import errorHandler from './app.errors';
-
 
 // Initialize the express app
 const app = express();
@@ -25,6 +24,9 @@ app.use('/api/users', authMiddleware)
 
 // Routers
 routers.forEach(x => app.use(x.path, x.router))
+app.all("/api/*", (req, res, next) => {
+    next(new NotFoundError())
+})
 
 // Error handler
 app.use(errorHandler)

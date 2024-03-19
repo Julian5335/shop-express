@@ -1,5 +1,9 @@
 import { Request, Response, Router } from "express"
 import authRouter from "./authentication/auth.routers"
+import userRouter from "./users/users.router"
+import addressRouter from "./users/addresses/addresses.router"
+
+type AppRouters = { path: string, router: Router }[]
 
 const healthRouter = Router()
 healthRouter.get('/', async (req: Request, res: Response) => {
@@ -8,7 +12,7 @@ healthRouter.get('/', async (req: Request, res: Response) => {
     })
 })
 
-const routers = [
+const routers: AppRouters = [
     {
         path: '/api/health', 
         router: healthRouter
@@ -16,6 +20,14 @@ const routers = [
     {
         path: '/api/auth', 
         router: authRouter
+    },
+    {
+        path: '/api/users',
+        router: userRouter
+    },
+    {
+        path: '/api/users/addresses',
+        router: addressRouter
     }
 ]
 

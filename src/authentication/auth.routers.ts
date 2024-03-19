@@ -1,12 +1,14 @@
 import { Request, Router } from "express";
-import { loginSchema, registerSchema } from "./auth.validation";
 import validate from "../app.validations";
+import { IUser } from "../users/users.model";
+import UserRepository, { IUserRepository } from "../users/users.repository";
 import AuthService, { IAuthService } from "./auth.service";
+import { loginSchema, registerSchema } from "./auth.validation";
 import TokenService, { ITokenService } from "./token.service";
-import { IUser } from "./auth.models";
 
-const tokenService: ITokenService = new TokenService()
-const service: IAuthService = new AuthService(tokenService)
+const userRepository: IUserRepository = new UserRepository()
+const tokenService: ITokenService = new TokenService(userRepository)
+const service: IAuthService = new AuthService(tokenService, userRepository)
 
 const authRouter = Router();
 
@@ -24,11 +26,12 @@ authRouter.post('/login', ...loginSchema, async (req: Request, res, next) => {
 authRouter.post('/register', ...registerSchema, async (req: Request, res, next) => {
     try {
         validate(req)
-        const { name, email, password } = req.body
+        const { name, email, password, dateOfBirth } = req.body
         const user: IUser = {
             name,
             email,
             password,
+            dateOfBirth,
             addresses: []
         }
         const addedUser = await service.addUser(user)

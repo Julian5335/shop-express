@@ -1,15 +1,12 @@
-import { Schema, Types, model } from "mongoose";
-import addressSchema, { IAddress } from "../addresses/address.models";
-
-export enum Role {
-    ADMIN = "ADMIN",
-    USER = "USER"
-}
+import { Schema, Types, model } from "mongoose"
+import addressSchema, { IAddress } from "./addresses/addresses.schema"
+import { Role } from "./users.enums"
 
 export interface IUser {
     _id?: Types.ObjectId
     email: string
     name: string
+    dateOfBirth: number
     password?: string
     roles?: Role[]
     addresses: IAddress[]
@@ -31,7 +28,7 @@ const schema = new Schema<IUser>({
     },
     roles: {
         type: [ String ],
-        default: [ Role.USER ]
+        default: [ Role.user ]
     },
     addresses: {
         type: [ addressSchema ],

@@ -14,6 +14,12 @@ export class HandledError extends Error {
 
 }
 
+export class NotFoundError extends HandledError {
+    constructor(message = 'Not Found', key?: string) {
+        super({ [key ?? "_"]: message }, 404)
+    }
+}
+
 export class BadRequestError extends HandledError {
     constructor(message: string, key?: string) {
         super({ [key ?? "_"]: message }, 400)
