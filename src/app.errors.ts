@@ -47,6 +47,9 @@ const errorHandler = (e: Error, req: Request, res: Response, next: NextFunction)
     if (e instanceof HandledError) {
         return res.status(e.status).json({ errors : e.errors })
     }
+    console.log(typeof e);
+    console.log(e.name);
+    console.log(e.message);
     return res.status(500).json({ errors: { _: "Internal server error" } })
 }
 

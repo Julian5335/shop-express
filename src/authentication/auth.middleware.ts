@@ -15,7 +15,13 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
         res.locals.principle = userId
         next()
     } catch (e) {
-        next(e)
+        if (e instanceof ForbiddenError) {
+            return next(e)
+        }
+        if (e instanceof Error) {
+            return next(new ForbiddenError(e.message))
+        }
+        next(new ForbiddenError('Unable to authenticate'))
     }
 }
 

@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { IUser } from "./users.model";
+import { getUserFromResponse } from "../authentication/auth.principal";
 
 const userRouter = Router()
 
-userRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user: IUser = res.locals.principle
+        const user = await getUserFromResponse(res)
         return res.status(200).json(user)
     } catch (e) {
        next(e) 

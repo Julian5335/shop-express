@@ -31,12 +31,7 @@ export const registerSchema = checkSchema({
         },
     },
     dateOfBirth: {
-        isInt: {
-            options: {
-                min: 0,
-                max: Date.now() + 3_153_600_000_000 // 100 years
-            },
-            errorMessage: 'Age should be between 13 and 100'
-        }
+        isInt: true,
+        errorMessage: 'Age should be between 13 and 100'
     }
 })

@@ -1,26 +1,24 @@
 import { NextFunction, Request, Response, Router } from "express";
-import AuthService, { IAuthService } from "../../authentication/auth.service";
-import TokenService, { ITokenService } from "../../authentication/token.service";
+import validate from "../../app.validations";
+import { getUserFromResponse } from "../../authentication/auth.principal";
 import UserRepository, { IUserRepository } from "../users.repository";
-import { IAddress } from "./addresses.schema";
 import UserService, { IUserService } from "../users.service";
+import { IAddress } from "./addresses.schema";
+import { addressSchema } from "./addresses.validation";
 
 const userRepository: IUserRepository = new UserRepository()
-const tokenService: ITokenService = new TokenService(userRepository)
-const authService: IAuthService = new AuthService(tokenService, userRepository)
 const userService: IUserService = new UserService(userRepository)
 
 const addressRouter = Router()
 
-addressRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+addressRouter.post('/', ...addressSchema, async (req: Request, res: Response, next: NextFunction) => {
     try {
+        validate(req)
         const address: IAddress = req.body
-        const user = await authService.getUserFromResponse(res)
+        const user = await getUserFromResponse(res)
         const response = await userService.addAddress(user, address)
         return res.status(201).json(response)
     } catch (e) {
-        console.log(e);
-        
         next(e)
     }
 })
