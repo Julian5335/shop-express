@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import validate from "../../app.validations";
-import { getUserFromResponse } from "../../authentication/auth.principal";
+import { getUserFromResponse } from "../../authentication/auth.user";
 import UserRepository, { IUserRepository } from "../users.repository";
 import UserService, { IUserService } from "../users.service";
 import { IAddress } from "./addresses.schema";

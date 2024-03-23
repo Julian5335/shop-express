@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { getUserFromResponse } from "../authentication/auth.principal";
+import { getUserFromResponse } from "../authentication/auth.user";
 
 const userRouter = Router()
 
