@@ -1,11 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
-import mongoose from "mongoose";
-import { ICategory } from "./categories.model";
 import CategoryRepository, { ICategoryRepository } from "./categories.repository";
-import { CategoryRequest } from "./categories.requests";
 import CategoryService, { ICategoryService } from "./category.service";
 
-const repository: ICategoryRepository<ICategory> = new CategoryRepository()
+const repository: ICategoryRepository = new CategoryRepository()
 const service: ICategoryService = new CategoryService(repository)
 
 const categoryRouter = Router()

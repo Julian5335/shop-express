@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { ForbiddenError } from "../app.errors";
 import { Role } from "../users/users.enums";
-import { IUser } from "../users/users.model";
 import UserRepository, { IUserRepository } from "../users/users.repository";
 import TokenService, { ITokenService } from "./token.service";
 
-const userRepository: IUserRepository<IUser> = new UserRepository()
+const userRepository: IUserRepository = new UserRepository()
 const tokenService: ITokenService = new TokenService(userRepository)
 
 async function handleAuthForRole(req: Request, res: Response, next: NextFunction, role: Role) {

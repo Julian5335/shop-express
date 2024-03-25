@@ -5,9 +5,8 @@ import UserRepository, { IUserRepository } from "../users.repository";
 import UserService, { IUserService } from "../users.service";
 import { IAddress } from "./addresses.schema";
 import { addressSchema } from "./addresses.validation";
-import { IUser } from "../users.model";
 
-const userRepository: IUserRepository<IUser> = new UserRepository()
+const userRepository: IUserRepository = new UserRepository()
 const userService: IUserService = new UserService(userRepository)
 
 const addressRouter = Router()

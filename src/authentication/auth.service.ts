@@ -2,8 +2,8 @@ import bcrypt from 'bcrypt';
 import { IUser } from '../users/users.model';
 import { IUserRepository } from '../users/users.repository';
 import { LoginError, UserExistsByEmailError } from './auth.errors';
-import { ITokenService } from './token.service';
 import { Token } from './auth.responses';
+import { ITokenService } from './token.service';
 
 export interface IAuthService {
     login(email: string, password: string): Promise<Token>
@@ -13,9 +13,9 @@ export interface IAuthService {
 export default class AuthService implements IAuthService {
 
     private tokenService: ITokenService
-    private userRepository: IUserRepository<IUser>
+    private userRepository: IUserRepository
 
-    constructor(tokenService: ITokenService, userRepository: IUserRepository<IUser>) {
+    constructor(tokenService: ITokenService, userRepository: IUserRepository) {
         this.tokenService = tokenService
         this.userRepository = userRepository
     }

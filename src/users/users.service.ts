@@ -9,9 +9,9 @@ export interface IUserService {
 
 export default class UserService implements IUserService {
 
-    private repository: IUserRepository<IUser>
+    private repository: IUserRepository
 
-    constructor(repository: IUserRepository<IUser>) {
+    constructor(repository: IUserRepository) {
         this.repository = repository
     }
 

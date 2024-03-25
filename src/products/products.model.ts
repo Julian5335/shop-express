@@ -5,10 +5,6 @@ export interface IProduct {
     categoryId: ObjectId,
     name: string,
     price: number,
-    discounts: {
-        flat: number,
-        percent: number
-    },
     available: boolean
 }
 
@@ -27,19 +23,6 @@ const schema = new Schema<IProduct>({
         type: Number,
         min: 0,
         required: true
-    },
-    discounts: {
-        flat: {
-            type: Number,
-            min: 0,
-            default: 0
-        },
-        percent: {
-            type: Number,
-            min: 0,
-            max: 100,
-            default: 0
-        }
     },
     available: {
         type: Boolean,

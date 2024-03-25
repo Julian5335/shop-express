@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { ICategory } from "./categories.model";
+import AdminCategoryService, { IAdminCategoryService } from "./categories.admin.service";
 import CategoryRepository, { ICategoryRepository } from "./categories.repository";
 import { CategoryRequest } from "./categories.requests";
-import CategoryService, { ICategoryService } from "./category.service";
+import { categorySchema } from "./categories.validation";
+import validate from "../app.validations";
 
-const repository: ICategoryRepository<ICategory> = new CategoryRepository()
-const service: ICategoryService = new CategoryService(repository)
+const repository: ICategoryRepository = new CategoryRepository()
+const service: IAdminCategoryService = new AdminCategoryService(repository)
 
 const adminCategoryRouter = Router()
 
@@ -18,8 +19,9 @@ adminCategoryRouter.get('/', async (req: Request, res: Response, next: NextFunct
     }
 })
 
-adminCategoryRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+adminCategoryRouter.post('/', ...categorySchema, async (req: Request, res: Response, next: NextFunction) => {
     try {
+        validate(req)
         const categoryRequest = req.body as CategoryRequest
         const category = await service.add(categoryRequest)
         return res.status(201).json(category)
@@ -28,8 +30,9 @@ adminCategoryRouter.post('/', async (req: Request, res: Response, next: NextFunc
     }
 })
 
-adminCategoryRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+adminCategoryRouter.put('/:id', ...categorySchema, async (req: Request, res: Response, next: NextFunction) => {
     try {
+        validate(req)
         const id = req.params.id as any
         const categoryRequest = req.body as CategoryRequest
         const category = await service.update(id, categoryRequest)
