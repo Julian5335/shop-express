@@ -1,22 +1,16 @@
 import { ObjectId } from "mongoose";
+import Repository, { IRepository } from "../database/repository";
 import User, { IUser } from "./users.model";
 
-export interface IUserRepository {
-    save(user: IUser): Promise<IUser>
-    findById(_id: ObjectId): Promise<IUser | null>
+export interface IUserRepository<IUser> extends IRepository<IUser> {
     findByEmail(email: string): Promise<IUser | null>
     findIdByEmail(email: string): Promise<{ _id: ObjectId } | null>;
 }
 
-export default class UserRepository implements IUserRepository {
+export default class UserRepository extends Repository<IUser> implements IUserRepository<IUser> {
 
-    async save(user: IUser): Promise<IUser> {
-        const userDocument = new User(user)
-        return userDocument.save()
-    }
-
-    async findById(_id: ObjectId): Promise<IUser | null> {
-        return await User.findOne({ _id })
+    constructor() {
+        super(User)
     }
 
     async findByEmail(email: string): Promise<IUser | null> {

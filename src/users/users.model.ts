@@ -1,9 +1,9 @@
-import { Schema, Types, model } from "mongoose"
+import { ObjectId, Schema, model } from "mongoose"
 import addressSchema, { IAddress } from "./addresses/addresses.schema"
 import { Role } from "./users.enums"
 
 export interface IUser {
-    _id?: Types.ObjectId
+    _id?: ObjectId
     email: string
     name: string
     dateOfBirth: number

@@ -6,7 +6,7 @@ import AuthService, { IAuthService } from "./auth.service";
 import { loginSchema, registerSchema } from "./auth.validation";
 import TokenService, { ITokenService } from "./token.service";
 
-const userRepository: IUserRepository = new UserRepository()
+const userRepository: IUserRepository<IUser> = new UserRepository()
 const tokenService: ITokenService = new TokenService(userRepository)
 const service: IAuthService = new AuthService(tokenService, userRepository)
 

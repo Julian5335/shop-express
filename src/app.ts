@@ -9,8 +9,10 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import mongoose from 'mongoose';
 import errorHandler, { NotFoundError } from './app.errors';
-import routers from './app.routers';
-import authMiddleware from './authentication/auth.middleware';
+import { adminAuthMiddleware, authMiddleware } from './authentication/auth.middleware';
+import { usersPath } from './routers/user.routers';
+import { adminsPath } from './routers/admin.routers';
+import routers from './routers/routers';
 
 // Initialize the express app
 const app = express();
@@ -20,7 +22,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // Authentication
-app.use('/api/users', authMiddleware)
+app.use(usersPath, authMiddleware)
+app.use(adminsPath, adminAuthMiddleware)
 
 // Routers
 routers.forEach(x => app.use(x.path, x.router))

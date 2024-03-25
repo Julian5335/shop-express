@@ -1,9 +1,8 @@
 import { Request, Response, Router } from "express"
-import authRouter from "./authentication/auth.routers"
-import userRouter from "./users/users.router"
-import addressRouter from "./users/addresses/addresses.router"
-
-type AppRouters = { path: string, router: Router }[]
+import authRouter from "../authentication/auth.routers"
+import { AppRouters } from "./routers.types"
+import userRouters from "./user.routers"
+import adminRouters from "./admin.routers"
 
 const healthRouter = Router()
 healthRouter.get('/', async (req: Request, res: Response) => {
@@ -21,14 +20,8 @@ const routers: AppRouters = [
         path: '/api/auth', 
         router: authRouter
     },
-    {
-        path: '/api/users',
-        router: userRouter
-    },
-    {
-        path: '/api/users/addresses',
-        router: addressRouter
-    }
+    ...userRouters,
+    ...adminRouters
 ]
 
 export default routers

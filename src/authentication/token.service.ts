@@ -3,6 +3,7 @@ import { ObjectId } from 'mongoose'
 import { ForbiddenError } from '../app.errors'
 import { Role } from '../users/users.enums'
 import { IUserRepository } from '../users/users.repository'
+import { IUser } from '../users/users.model'
 
 type Payload = { email: string, iat: number, exp: number, roles: Role[] }
 
@@ -14,9 +15,9 @@ export interface ITokenService {
 export default class TokenService implements ITokenService {
 
     private secret: string
-    private userRepository: IUserRepository
+    private userRepository: IUserRepository<IUser>
 
-    constructor(userRepository: IUserRepository) { 
+    constructor(userRepository: IUserRepository<IUser>) { 
         this.secret = process.env.JWT_SECRET!
         this.userRepository = userRepository
     }
